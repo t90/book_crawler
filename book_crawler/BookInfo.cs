@@ -18,6 +18,9 @@ namespace BookCrawler
 
 		public string ISBN{get;set;}
 
+		public string Genre{get;set;}
+
+		public Author[] Authors{get;set;}
 
 	}
 }

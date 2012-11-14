@@ -9,19 +9,21 @@ namespace BookCrawler
 		public static void Main (string[] args)
 		{
 			try{
-				using (var zip = ZipFile.Read(@"C:\projects\book_crawler\test.zip")) {
+				var archiveName = @"C:\projects\book_crawler\test.zip";
+				using (var zip = ZipFile.Read(archiveName)) {
 					foreach(var entry in zip.Entries){
 						var bookInfoScraper = new BookInfoScraper ();
 						var stream = new ReadStream(bookInfoScraper.Buffer);
 						try{
 							entry.Extract(stream);
 						}
-						catch(IndexOutOfRangeException ex){
-
+						catch(FormatException fe){
+							throw new ApplicationException(string.Format("Error processing file {0} from archive {1}",entry.FileName, archiveName),fe);
 						}
-
-//						entry.O.Read(bookInfoScraper.Buffer,0, bookInfoScraper.Buffer.Length);
-						bookInfoScraper.GetBookInfo();
+						catch(IndexOutOfRangeException){
+							;
+						}
+						var book = bookInfoScraper.GetBookInfo();
 					}
 				}
 			}

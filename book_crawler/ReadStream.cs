@@ -30,13 +30,13 @@ namespace BookCrawler
 
 		public override void Write (byte[] buffer, int offset, int count)
 		{
-			if(_storageLeft <= 0){
-				throw new IndexOutOfRangeException("No more space left in the ReadStream");
-			}
 			var copyBytes = Math.Min(count,_storageLeft);
 			Array.Copy(buffer,offset,_buffer,_index,copyBytes);
 			_storageLeft -= copyBytes;
 			_index += copyBytes;
+			if(_storageLeft <= 0){
+				throw new IndexOutOfRangeException("No more space left in the ReadStream");
+			}
 		}
 
 		public override bool CanRead {
